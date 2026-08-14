@@ -29,18 +29,18 @@ public class Book implements Serializable {
     @Transient
     private String currency;
     @Transient
-    private String enviroment;
+    private String environment;
 
     public Book() {}
 
-    public Book(Long id, String author, String title, Date launchDate, Double price, String currency, String enviroment) {
+    public Book(Long id, String author, String title, Date launchDate, Double price, String currency, String environment) {
         this.id = id;
         this.author = author;
         this.title = title;
         this.launchDate = launchDate;
         this.price = price;
         this.currency = currency;
-        this.enviroment = enviroment;
+        this.environment = environment;
     }
 
     public Long getId() {
@@ -92,21 +92,21 @@ public class Book implements Serializable {
     }
 
     public String getEnviroment() {
-        return enviroment;
+        return environment;
     }
 
     public void setEnviroment(String enviroment) {
-        this.enviroment = enviroment;
+        this.environment = enviroment;
     }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Book book)) return false;
-        return Objects.equals(id, book.id) && Objects.equals(author, book.author) && Objects.equals(title, book.title) && Objects.equals(launchDate, book.launchDate) && Objects.equals(price, book.price) && Objects.equals(currency, book.currency) && Objects.equals(enviroment, book.enviroment);
+        return Objects.equals(id, book.id) && Objects.equals(author, book.author) && Objects.equals(title, book.title) && Objects.equals(launchDate, book.launchDate) && Objects.equals(price, book.price) && Objects.equals(currency, book.currency) && Objects.equals(environment, book.environment);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, author, title, launchDate, price, currency, enviroment);
+        return Objects.hash(id, author, title, launchDate, price, currency, environment);
     }
 }
