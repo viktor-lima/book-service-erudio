@@ -4,6 +4,7 @@ package br.com.erudio.controller;
 import br.com.erudio.dto.Exchange;
 import br.com.erudio.enviroment.InstanceInformationService;
 import br.com.erudio.model.Book;
+import br.com.erudio.proxy.ExchangeProxy;
 import br.com.erudio.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -25,34 +26,22 @@ public class BookController {
     @Autowired
     private BookRepository repository;
 
+    @Autowired
+    private ExchangeProxy proxy;
+
     @GetMapping(value = "/{id}/{currency}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Book findBookBook(
             @PathVariable("id") Long id,
             @PathVariable("currency") String currency
     ){
         String port = informationService.retriveServerPort();
-
         Book book = repository.findById(id).orElseThrow();
 
-        HashMap<String, String> parans = new HashMap<>();
-        parans.put("amount", book.getPrice().toString());
-        parans.put("from", "USD");
-        parans.put("to", currency);
+        Exchange exchange = proxy.getExchange(book.getPrice(), "USD", currency);
 
-        var response = new RestTemplate()
-                .getForEntity("http://localhost:8001/exchange-service" +
-                        "/{amount}" +
-                        "/{from}" +
-                        "/{to}", Exchange.class, parans);
-
-        Exchange exchange = response.getBody();
-
-        book.setEnviroment(port);
+        book.setEnviroment(port + " FEING");
         book.setPrice(exchange.getConvertedValue());
         book.setCurrency(currency);
-
-        System.out.println(book.getEnviroment());
-        System.out.println(book.getCurrency());
 
         return book;
     }
